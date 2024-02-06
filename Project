@@ -1,0 +1,28 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import pandas as pd
+
+url = 'https://gab.com/groups/36304'
+
+driver = webdriver.Chrome()
+driver.get(url)
+
+posts = driver.find_elements(By.CLASS_NAME, '_UuSG')
+
+post_texts = [post.text for post in posts]
+print("All posts:")
+for text in post_texts:
+    print(text)
+
+baking_posts = [text for text in post_texts if 'baking' in text.lower()]
+print("\nBaking posts:")
+for text in baking_posts:
+    print(text)
+
+sourdough_posts = baking_posts[:10]
+
+df = pd.DataFrame({'Baking Posts': sourdough_posts})
+
+df.to_csv('baking_posts.csv', index=False)
+
+driver.quit()
